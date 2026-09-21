@@ -213,7 +213,11 @@ function ReviewPanel({ patient, onExport }: { patient: Patient; onExport: () => 
 export function TrialGuardDashboard() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
-  const [selected, setSelected] = useState(patients[0]);
+  const [selected, setSelected] = useState<Patient>(() => {
+    const initialPatient = patients[0];
+    if (!initialPatient) throw new Error("Synthetic screening queue is empty");
+    return initialPatient;
+  });
   const [notice, setNotice] = useState("");
   const visiblePatients = useMemo(() => filter === "All" ? patients : patients.filter((patient) => patient.status === filter), [filter]);
 
